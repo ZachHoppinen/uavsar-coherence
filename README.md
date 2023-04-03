@@ -1,9 +1,9 @@
 # uavsar-coherence
+
 Exploring the controlling factors of L-band coherence in seasonal snowpacks using time-series of UAVSAR, an aerial L-band platform from NASA, over multiple sites along with extensive field, modeling, and lidar datasets. Pushing towards an article in Cryosphere answering the following research questions:
 
 1. How do snow depth, depth change, incidence angle, vegetation, and wetness impact the coherence of L-band InSAR images in seasonal snow?
 2. Can we use our temporal decay model for L-band coherence to estimate coherence in seasonal snow coverage and snow-water retrieval uncertainties for the upcoming NISAR satellite mission?
-
 
 ## Project To-Do
 
@@ -44,10 +44,6 @@ Exploring the controlling factors of L-band coherence in seasonal snowpacks usin
     - [ ] Depth vs coherence (pearson r, linear model)
     - [ ] Wetness vs coherence (pearson r, linear model)
     - [ ] Depth change vs coherence (pearson r, linear model)
-  - [ ] Comparison to ancillary factors
-    - [ ] lidar veg height, density (pearson r, linear model)
-    - [ ] USGS land cover classification (ANOVA - mean coherence)
-    - [ ] incidence angle (pearson r, linear model)
   - [ ] NISAR estimate winter coherence
     - [ ] Solving temporal decay model at each study site
     - [ ] Set t = 12
@@ -60,6 +56,21 @@ Exploring the controlling factors of L-band coherence in seasonal snowpacks usin
     - [ ] plot NISAR SWE uncertainty over western US
   
   - [ ] Results
+    - [ ] Field Datasets
+      - [ ] Facet plot (scatter or box) of UAVSAR coherence vs snow depth (all sources), snow depth
+      change (all source), snow wetness (all sources), incidence angle with p, r, linear model (for significant).
+    - [ ] Comparison of lidar snow depth
+      - [ ] Scatter plot of UAVSAR coherence vs lidar snow depth for tree-free, treed
+      with r, p
+    - [ ] SNOWMODEL comparison
+      - [ ] facet plot of depth, wetness, depth change to coherence (r, p, linear model)
+    - [ ] NISAR estimated coherence
+      - [ ] maps of estimated NISAR coherence (left) with temporal decay model on right (t - x axis, coherence - y)
+      with RMSE
+      - [ ] random forest feature importances for coherence
+      - [ ] NISAR estimated coherence over western US using data from January
+    - [ ] SWE uncertainty
+      - [ ] map of SWE uncertainty for US
   
   - [ ] Discussion
     - [ ] How does snow depth impact L-band coherence?
