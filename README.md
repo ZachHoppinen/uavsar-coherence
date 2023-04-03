@@ -1,11 +1,11 @@
 # uavsar-coherence
 Exploring the controlling factors of L-band coherence in seasonal snowpacks using time-series of UAVSAR, an aerial L-band platform from NASA, over multiple sites along with extensive field, modeling, and lidar datasets. Pushing towards an article in Cryosphere answering the following research questions:
 
-1. How do snow depth, depth change, and wetness impact the coherence of L-band InSAR images?
+1. How do snow depth, depth change, incidence angle, vegetation, and wetness impact the coherence of L-band InSAR images in seasonal snow?
 2. Can we use our temporal decay model for L-band coherence to estimate coherence in seasonal snow coverage and snow-water retrieval uncertainties for the upcoming NISAR satellite mission?
 
 
-# Project To-Do
+## Project To-Do
 
 - [ ] Introduction
   - [ ] Write Significance
