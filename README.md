@@ -80,3 +80,9 @@ Exploring the controlling factors of L-band coherence in seasonal snowpacks usin
     - [ ] What is the uncertainty associated with SWE retrievals from NISAR?
     
   - [ ] Conclusion
+
+## Installation
+
+```bash
+mamba env create -f environment.yml 
+```

@@ -1,0 +1,17 @@
+name: coherence
+channels:
+ - conda-forge
+ - defaults
+dependencies:
+ - python
+ - numpy
+ - pandas
+ - geopandas
+ - xarray
+ - rioxarray
+ - shapely
+ - hyp3_sdk
+ - matplotlib
+ - netcdf4
+ - ipython
+ - fastparquet
