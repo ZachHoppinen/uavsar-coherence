@@ -9,10 +9,10 @@
 echo "Starting."
 
 eval "$(conda shell.bash hook)"
-conda activate proj
+conda activate coherence
 
 echo "Activated environment.."
 
-python -u /bsuhome/zacharykeskinen/uavsar-coherence/src/data_acquisition/tau/calc_taus.py
+python -u /bsuhome/zacharykeskinen/uavsar-coherence/src/tau/calc_taus.py
 
 echo "Done"

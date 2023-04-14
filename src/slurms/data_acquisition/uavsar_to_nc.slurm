@@ -9,7 +9,7 @@
 echo "Starting."
 
 eval "$(conda shell.bash hook)"
-conda activate proj
+conda activate coherence
 
 echo "Activated environment.."
 
