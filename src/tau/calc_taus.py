@@ -23,6 +23,9 @@ outdir = Path('/bsuhome/zacharykeskinen/scratch/data/uavsar/coherence/taus')
 
 for loc_fp in indir.glob('*.nc'):
     try:
+        if outdir.joinpath(loc_fp.name.replace(' ', '-')).exists():
+            continue
+            
         vv_cor = xr.open_dataset(loc_fp)
         vv_cor = vv_cor.drop('band')
         t_delta = pd.to_timedelta(vv_cor.flight2 - vv_cor.time)
