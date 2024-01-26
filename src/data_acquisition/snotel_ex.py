@@ -28,13 +28,12 @@ def vectorize_valid(fp):
 fig_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/figures/snotels')
 
 uavsar_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar')
-
 # get list of uavsars directories
 uavsars = list(uavsar_dir.glob('*'))
 # remove tmp dir
 uavsars = [u for u in uavsars if u != 'tmp']
 # get location and flight direction for key and first coherence tiff as value of dictionary
-uavsars = {'_'.join(u.stem.split('_')[:2]): list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
+uavsars = {u.stem.split('_')[0]: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
 # convert rasterio image to valid geometry polygon
 uavsars = {u: vectorize_valid(v) for u, v in uavsars.items()}
 # convert to geodataframe
@@ -67,25 +66,44 @@ bounds.plot(ax = ax, color = 'red', zorder = 1e3, aspect=1)
 intersect = snotels.sjoin(bounds, how = 'inner')
 intersect = intersect.set_crs('EPSG:4326')
 
-cdec = False
-if cdec:
-    vrs = [
-        CdecStationVariables.SWE,
-        CdecStationVariables.SNOWDEPTH,
-        CdecStationVariables.TEMPAVG
-    ]
-    points = CDECPointData.points_from_geometry(bounds, vrs, snow_courses=False)
-    df = points.to_dataframe()
-    df.geometry = df.geometry.transform(_drop_z)
-    df = df.set_crs('EPSG:4326')
-    print(df)
+# cdec = False
+# if cdec:
+#     vrs = [
+#         CdecStationVariables.SWE,
+#         CdecStationVariables.SNOWDEPTH,
+#         CdecStationVariables.TEMPAVG
+#     ]
+#     points = CDECPointData.points_from_geometry(bounds, vrs, snow_courses=False)
+#     df = points.to_dataframe()
+#     df.geometry = df.geometry.transform(_drop_z)
+#     df = df.set_crs('EPSG:4326')
+#     print(df)
 
-    intersect = gpd.GeoDataFrame(pd.concat([df, intersect], ignore_index = True))
+#     intersect = gpd.GeoDataFrame(pd.concat([df, intersect], ignore_index = True))
 
 intersect.plot(ax = ax, color = 'green', zorder = 1e4, markersize = 5)
-snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
-intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
 
 ax.set_xlim(-125, -105)
 ax.set_ylim(33, 48)
 plt.savefig(fig_dir.joinpath('snotel_uavsar.png'))
+
+snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
+intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
+snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
+
+state_abbr = {'Colorado':'CO', 'Idaho': 'ID', 'California':'CA', 'New Mexico': 'NM', 'Utah': 'UT', 'Montana': 'MT'}
+intersect = gpd.read_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
+
+vrs = [
+        SnotelVariables.SWE,
+        SnotelVariables.SNOWDEPTH,
+        SnotelVariables.TEMPAVG
+    ]
+
+for i, r in intersect.iterrows():
+    snotel_id = f"{r['ID'].strip()}:{state_abbr[r['State']]}:SNTL"
+    snotel_point = SnotelPointData(snotel_id, f"{r['index_righ']}")
+    df = snotel_point.get_daily_data(datetime(2019, 11, 1), datetime(2022, 6, 1),vrs)
+    if type(df) == gpd.GeoDataFrame:
+        snotel_data_dir.joinpath(r['index_righ']).mkdir(exist_ok = True)
+        df.to_csv(snotel_data_dir.joinpath(r['index_righ'], f"{r['ID'].strip()}:{state_abbr[r['State']]}:SNTL.csv"))
