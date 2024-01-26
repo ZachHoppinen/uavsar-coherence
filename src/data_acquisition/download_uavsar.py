@@ -12,7 +12,7 @@ def download_collection(name):
     data_dir = Path('~/scratch/coherence/uavsar/').expanduser()
     snowex_dates = ('2019-11-01', '2022-05-01')
 
-    collection = UavsarCollection(collection = name, work_dir = data_dir, dates = snowex_dates)
+    collection = UavsarCollection(collection = name, work_dir = data_dir, dates = snowex_dates, clean = False)
     collection.collection_to_tiffs()
 
 if __name__ == '__main__':
