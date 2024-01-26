@@ -15,19 +15,31 @@ from datetime import datetime
 from metloom.pointdata import SnotelPointData, CDECPointData
 from metloom.variables import SnotelVariables, CdecStationVariables
 
+from rasterio import features
+def vectorize_valid(fp):
+    img = rxa.open_rasterio(fp).squeeze('band')
+    img = ~img.isnull()
+    img = img.astype('uint8')
+    mask = img == 1
+    coords = list((features.shapes(img, mask = mask)))[0][0]['coordinates'][0]
+    xy_coords = [(img.x[int(x)-1].values.ravel()[0], img.y[int(y)-1].values.ravel()[0]) for x, y in coords]
+    return Polygon(xy_coords)
+
 fig_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/figures/snotels')
 
 uavsar_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar')
 
+# get list of uavsars directories
 uavsars = list(uavsar_dir.glob('*'))
+# remove tmp dir
 uavsars = [u for u in uavsars if u != 'tmp']
-uavsars = {u: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
-for u, v in uavsars.items():
-    print(rxa.open_rasterio(v))
-# uavsars = {'_'.join(fp.stem.split('_')[:2]):rxa.open_rasterio(v) for fp, v in uavsars.items()}
-# bounds = gpd.GeoDataFrame(uavsars.values(), index = uavsars.keys(), columns = ['geometry'])
-# bounds = bounds.set_crs('EPSG:4326')
-# print(bounds)
+# get location and flight direction for key and first coherence tiff as value of dictionary
+uavsars = {'_'.join(u.stem.split('_')[:2]): list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
+# convert rasterio image to valid geometry polygon
+uavsars = {u: vectorize_valid(v) for u, v in uavsars.items()}
+# convert to geodataframe
+bounds = gpd.GeoDataFrame(uavsars.values(), index = uavsars.keys(), columns = ['geometry'])
+bounds = bounds.set_crs('EPSG:4326')
 
 # bounds_fp = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/uavsar-bounds/snowex-uavsar-bounds-v2.shp')
 # bounds = gpd.read_file(bounds_fp)
@@ -44,13 +56,13 @@ for u, v in uavsars.items():
 # frequency=DAILY&duration=I&customDuration=&dayPart=E&year=2024&month=1&day=25&monthPart=E&forecastPubMonth=1&\
 # forecastPubDay=1&forecastExceedance=50&useMixedPast=true&seqColor=1&divColor=7&scaleType=D&scaleMin=&scaleMax=&\
 # referencePeriodType=POR&referenceBegin=1991&referenceEnd=2020&minimumYears=20&hucAssociations=true&lat=40.00&lon=-99.00&zoom=4.0
-"""
+
 snotels = pd.read_csv('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel/snotel-list.csv')
 snotels = gpd.GeoDataFrame(snotels, geometry=gpd.points_from_xy(snotels.Longitude, snotels.Latitude), crs='epsg:4326')
 
 fig, ax= plt.subplots()
 snotels.plot(ax = ax, markersize = 1)
-bounds.plot(ax = ax, color = 'red', zorder = 1e3)
+bounds.plot(ax = ax, color = 'red', zorder = 1e3, aspect=1)
 
 intersect = snotels.sjoin(bounds, how = 'inner')
 intersect = intersect.set_crs('EPSG:4326')
@@ -71,8 +83,9 @@ if cdec:
     intersect = gpd.GeoDataFrame(pd.concat([df, intersect], ignore_index = True))
 
 intersect.plot(ax = ax, color = 'green', zorder = 1e4, markersize = 5)
+snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
+intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
 
 ax.set_xlim(-125, -105)
 ax.set_ylim(33, 48)
 plt.savefig(fig_dir.joinpath('snotel_uavsar.png'))
-"""
