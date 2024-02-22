@@ -72,17 +72,18 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         concat_dss.append(ds)
 
     ds = xr.combine_by_coords(concat_dss).rename({'band_data': 'cor'})
-    print(ds)
-
+    ds = ds.where((ds > 0) & (ds < 1))
     for heading, fp in headings.items():
-        print(fp)
         inc = xr.open_dataarray(list(fp.parent.glob('*.inc.tiff'))[0]).squeeze('band', drop = True)
-        ds['inc'] = inc.rio.reproject_match(concat_dss[0]).expand_dims(heading = [heading])
+        inc = inc.rio.reproject_match(concat_dss[0]).expand_dims(heading = [heading])
+        inc = inc.where((inc < 100) & (inc > -100))
+        ds['inc'] = inc
         ds['inc'].plot()
-        plt.savefig(fig_dir.joinpath('inc', site + '_' + heading +'_inc.png'))
+        plt.savefig(fig_dir.joinpath('inc', site + '_' + str(heading) +'_inc.png'))
         plt.close()
 
-    ds['cor'].isel(time1 = 0, time2 = 0, heading = 0, pol = 0).plot()
+    ds = ds.dropna('x', how = 'all').dropna('y', how = 'all')
+    ds['cor'].isel(time1 = 0, time2 = 1, heading = 0, pol = 0).plot()
     plt.savefig(fig_dir.joinpath('coherence', site + '_cor.png'))
     plt.close()
     print(ds)
