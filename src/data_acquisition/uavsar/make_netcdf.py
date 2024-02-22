@@ -50,6 +50,7 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         if heading not in headings: headings[heading] = fp
 
         pol = fp.stem.split('_')[-2][4:]
+
         lat_ddeg, lon_ddeg = float(ann.loc['value', 'grd_phs.row_mult']), float(ann.loc['value', 'grd_phs.col_mult'])
         lat, lon = float(ann.loc['value', 'grd_mag.row_addr']), float(ann.loc['value', 'grd_mag.col_addr'])
 
@@ -83,9 +84,19 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         plt.close()
 
     ds = ds.dropna('x', how = 'all').dropna('y', how = 'all')
-    ds['cor'].isel(time1 = 0, time2 = 1, heading = 0, pol = 0).plot()
-    plt.savefig(fig_dir.joinpath('coherence', site + '_cor.png'))
-    plt.close()
+
+    ds['time1'] = pd.to_datetime(ds.time1)
+    ds['time2'] = pd.to_datetime(ds.time2)
+
+    from itertools import product
+    for t1, t2 in product(ds.time1, ds.time2):
+        if (~ds['cor'].sel(time1 = t1, time2 = t2).isel(heading = 0, pol = 0).isnull()).sum() == 0: continue
+        
+        ds['cor'].sel(time1 = t1, time2 = t2).isel(heading = 0, pol = 0).plot()
+        plt.savefig(fig_dir.joinpath('coherence', site + '_cor.png'))
+        plt.close()
+        break
+
     print(ds)
 
     # ds.to_netcdf(out_dir.joinpath(site + '.nc'))
