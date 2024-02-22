@@ -48,16 +48,7 @@ bounds = bounds.set_crs('EPSG:4326')
 # _drop_z = lambda geom: wkb.loads(wkb.dumps(geom, output_dimension=2))
 # bounds.geometry = bounds.geometry.transform(_drop_z)
 
-# https://www.nrcs.usda.gov/wps/portal/wcc/home/quicklinks/stateSnowPrograms#version=167&\
-# elements=W,D&networks=!SCAN,SNTLT,OTHER,SNOW&states=!&counties=!&hucs=&minElevation=&\
-# maxElevation=&elementSelectType=all&activeOnly=true&activeForecastPointsOnly=false&hucLabels=\
-# false&hucIdLabels=false&hucParameterLabels=true&stationLabels=&overlays=&hucOverlays=2&basinOpacity=\
-# 75&basinNoDataOpacity=25&basemapOpacity=100&maskOpacity=0&mode=stations&openSections=dataElement,\
-# parameter,date,basin,options,elements,location,networks,stationList&controlsOpen=true&popup=&popupMulti=&\
-# popupBasin=&base=esriNgwm&displayType=inventory&basinType=6&dataElement=WTEQ&depth=-8&parameter=PCTMED&\
-# frequency=DAILY&duration=I&customDuration=&dayPart=E&year=2024&month=1&day=25&monthPart=E&forecastPubMonth=1&\
-# forecastPubDay=1&forecastExceedance=50&useMixedPast=true&seqColor=1&divColor=7&scaleType=D&scaleMin=&scaleMax=&\
-# referencePeriodType=POR&referenceBegin=1991&referenceEnd=2020&minimumYears=20&hucAssociations=true&lat=40.00&lon=-99.00&zoom=4.0
+# https://www.nrcs.usda.gov/wps/portal/wcc/home/quicklinks/stateSnowPrograms#version=167&elements=W,D&networks=!SCAN,SNTLT,OTHER,SNOW&states=!&counties=!&hucs=&minElevation=&maxElevation=&elementSelectType=all&activeOnly=true&activeForecastPointsOnly=false&hucLabels=false&hucIdLabels=false&hucParameterLabels=true&stationLabels=&overlays=&hucOverlays=2&basinOpacity=75&basinNoDataOpacity=25&basemapOpacity=100&maskOpacity=0&mode=stations&openSections=dataElement,parameter,date,basin,options,elements,location,networks,stationList&controlsOpen=true&popup=&popupMulti=&popupBasin=&base=esriNgwm&displayType=inventory&basinType=6&dataElement=WTEQ&depth=-8&parameter=PCTMED&frequency=DAILY&duration=I&customDuration=&dayPart=E&year=2024&month=1&day=25&monthPart=E&forecastPubMonth=1&forecastPubDay=1&forecastExceedance=50&useMixedPast=true&seqColor=1&divColor=7&scaleType=D&scaleMin=&scaleMax=&referencePeriodType=POR&referenceBegin=1991&referenceEnd=2020&minimumYears=20&hucAssociations=true&lat=40.00&lon=-99.00&zoom=4.0
 
 snotels = pd.read_csv('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel/snotel-list.csv')
 snotels = gpd.GeoDataFrame(snotels, geometry=gpd.points_from_xy(snotels.Longitude, snotels.Latitude), crs='epsg:4326')
@@ -92,7 +83,6 @@ plt.savefig(fig_dir.joinpath('snotel_uavsar.png'))
 
 snotel_data_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/snotels/')
 intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
-snotel_data_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/snotels')
 
 state_abbr = {'Colorado':'CO', 'Idaho': 'ID', 'California':'CA', 'New Mexico': 'NM', 'Utah': 'UT', 'Montana': 'MT'}
 intersect = gpd.read_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
@@ -103,7 +93,7 @@ vrs = [
         SnotelVariables.TEMPAVG
     ]
 
-for i, r in tqdm(intersect.iterrows(), size = len(intersect)):
+for i, r in tqdm(intersect.iterrows(), total = len(intersect)):
     snotel_id = f"{r['ID'].strip()}:{state_abbr[r['State']]}:SNTL"
     snotel_point = SnotelPointData(snotel_id, f"{r['index_righ']}")
     df = snotel_point.get_daily_data(datetime(2019, 10, 1), datetime(2022, 6, 1), vrs)
