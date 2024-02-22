@@ -13,6 +13,6 @@ conda activate coherence
 
 echo "Activated environment.."
 
-python -u /bsuhome/zacharykeskinen/uavsar-coherence/src/data_acquisition/download_uavsar.py
+python -u /bsuhome/zacharykeskinen/uavsar-coherence/src/data_acquisition/uavsar/download_uavsar.py
 
 echo "Done"
