@@ -1,0 +1,1 @@
+curl -X GET "https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations?activeOnly=true&returnForecastPointMetadata=false&returnReservoirMetadata=false&returnStationElements=false" -H "accept: application/json" > ~/uavsar-coherence/data/snotel.json

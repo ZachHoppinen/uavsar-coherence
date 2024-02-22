@@ -10,6 +10,8 @@ import rioxarray as rxa
 
 import matplotlib.pyplot as plt
 
+from tqdm import tqdm
+
 from datetime import datetime
 
 from metloom.pointdata import SnotelPointData, CDECPointData
@@ -25,6 +27,7 @@ def vectorize_valid(fp):
     xy_coords = [(img.x[int(x)-1].values.ravel()[0], img.y[int(y)-1].values.ravel()[0]) for x, y in coords]
     return Polygon(xy_coords)
 
+print('Starting...')
 fig_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/figures/snotels')
 
 uavsar_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar')
@@ -35,7 +38,7 @@ uavsars = [u for u in uavsars if u != 'tmp']
 # get location and flight direction for key and first coherence tiff as value of dictionary
 uavsars = {u.stem.split('_')[0]: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
 # convert rasterio image to valid geometry polygon
-uavsars = {u: vectorize_valid(v) for u, v in uavsars.items()}
+uavsars = {u: vectorize_valid(v) for u, v in tqdm(uavsars.items())}
 # convert to geodataframe
 bounds = gpd.GeoDataFrame(uavsars.values(), index = uavsars.keys(), columns = ['geometry'])
 bounds = bounds.set_crs('EPSG:4326')
@@ -87,9 +90,9 @@ ax.set_xlim(-125, -105)
 ax.set_ylim(33, 48)
 plt.savefig(fig_dir.joinpath('snotel_uavsar.png'))
 
-snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
+snotel_data_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/snotels/')
 intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
-snotel_data_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel')
+snotel_data_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/snotels')
 
 state_abbr = {'Colorado':'CO', 'Idaho': 'ID', 'California':'CA', 'New Mexico': 'NM', 'Utah': 'UT', 'Montana': 'MT'}
 intersect = gpd.read_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
@@ -100,10 +103,10 @@ vrs = [
         SnotelVariables.TEMPAVG
     ]
 
-for i, r in intersect.iterrows():
+for i, r in tqdm(intersect.iterrows(), size = len(intersect)):
     snotel_id = f"{r['ID'].strip()}:{state_abbr[r['State']]}:SNTL"
     snotel_point = SnotelPointData(snotel_id, f"{r['index_righ']}")
-    df = snotel_point.get_daily_data(datetime(2019, 11, 1), datetime(2022, 6, 1),vrs)
+    df = snotel_point.get_daily_data(datetime(2019, 10, 1), datetime(2022, 6, 1), vrs)
     if type(df) == gpd.GeoDataFrame:
         snotel_data_dir.joinpath(r['index_righ']).mkdir(exist_ok = True)
         df.to_csv(snotel_data_dir.joinpath(r['index_righ'], f"{r['ID'].strip()}:{state_abbr[r['State']]}:SNTL.csv"))
