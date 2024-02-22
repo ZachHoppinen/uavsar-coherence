@@ -49,16 +49,14 @@ for site in sites:
     ds['tree_perc'] = tree_perc
 
     ## Adding in landcover
-    # transformer = Transformer.from_crs("epsg:4326","epsg:7030", always_xy = True)
-    # bds = list(transformer.transform(*img_bds[:2]))
-    # bds.extend(list(transformer.transform(*img_bds[2:])))
 
-    # print(lc.spatial_ref.attrs['crs_wkt'])
     lc_clip = lc.rio.clip_box(*img_bds, crs = 'EPSG:4326')
     # reproject and mask out areas where the interpolation led to artifacts
     lc_clip = lc_clip.rio.reproject_match(ds['dem'])
     # add to dataset
     ds['land_cover'] = lc_clip
+
+    ## Adding in 
 
 
     # print((~ds['tree_perc'].isnull()).sum())

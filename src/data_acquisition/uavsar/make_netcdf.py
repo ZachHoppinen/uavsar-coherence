@@ -11,6 +11,8 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+fig_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/figures')
+
 uavsars = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar/tiffs').rglob('*.cor.grd.tiff')
 uavsars = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar').rglob('*.cor.grd.tiff')
 
@@ -36,7 +38,7 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
     dss = {value: xr.open_dataarray(value).squeeze('band', drop = True) for key, value in uavsars.items() if site in key.lower()}
     concat_dss = []
     
-
+    headings = {}
     for i, (fp, ds) in tqdm(enumerate(dss.items()), total = len(dss)):
 
         ann = pd.read_csv(list(fp.parent.glob('*.csv'))[0], index_col = 0)
@@ -45,7 +47,9 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         t1, t2 = pd.to_datetime(t1), pd.to_datetime(t2)
         # heading = ann.loc['value', 'peg heading']
         heading = int(fp.stem.split('_')[1][:3])
-        pol = ann.loc['value', 'polarization']
+        if heading not in headings: headings[heading] = fp
+
+        pol = fp.stem.split('_')[-2][4:]
         lat_ddeg, lon_ddeg = float(ann.loc['value', 'grd_phs.row_mult']), float(ann.loc['value', 'grd_phs.col_mult'])
         lat, lon = float(ann.loc['value', 'grd_mag.row_addr']), float(ann.loc['value', 'grd_mag.col_addr'])
 
@@ -67,11 +71,20 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
 
         concat_dss.append(ds)
 
-    ds = xr.combine_by_coords(concat_dss)
+    ds = xr.combine_by_coords(concat_dss).rename({'band_data': 'cor'})
+    print(ds)
 
-    ds = ds.to_dataset(name = 'coherence', promote_attrs = True)
+    for heading, fp in headings.items():
+        print(fp)
+        inc = xr.open_dataarray(list(fp.parent.glob('*.inc.tiff'))[0]).squeeze('band', drop = True)
+        ds['inc'] = inc.rio.reproject_match(concat_dss[0]).expand_dims(heading = [heading])
+        ds['inc'].plot()
+        plt.savefig(fig_dir.joinpath('inc', site + '_' + heading +'_inc.png'))
+        plt.close()
 
-    inc = xr.open_dataarray(list(fp.parent.glob('*.inc.grd.tiff'))[0]).squeeze('band', drop = True)
-    ds['inc'] = inc.rio.reproject_match(concat_dss[0])
+    ds['cor'].isel(time1 = 0, time2 = 0, heading = 0, pol = 0).plot()
+    plt.savefig(fig_dir.joinpath('coherence', site + '_cor.png'))
+    plt.close()
+    print(ds)
 
-    ds.to_netcdf(out_dir.joinpath(site + '.nc'))
+    # ds.to_netcdf(out_dir.joinpath(site + '.nc'))
