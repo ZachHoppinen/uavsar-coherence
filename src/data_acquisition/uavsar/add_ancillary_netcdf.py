@@ -24,12 +24,18 @@ out_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar/')
 sites = list(out_dir.glob('*.nc'))
 
 for site in sites:
+    print(site)
+    
     ds = xr.open_dataset(site)
     ds = ds.rio.write_crs('epsg:4326')
 
     ## Adding in DEM
     geom = ds.rio.bounds()
     ds['dem'] = py3dep.get_dem(geom, 30).drop_vars('spatial_ref').rio.write_crs('EPSG:4326').rio.reproject_match(ds)
+
+    
+    print(ds)
+    continue
 
     ## Adding in trees
     # find bounds in this datasets crs to clip it before reprojecting

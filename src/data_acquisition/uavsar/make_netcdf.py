@@ -71,7 +71,7 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         ds.attrs['lat_looks'] = row_multi_to30
         ds.attrs['lon_looks'] = col_multi_to30
 
-        concat_dss.append(ds.chunk())
+        concat_dss.append(ds) # .chunk()
 
     ds = xr.combine_by_coords(concat_dss).rename({'band_data': 'cor'})
     ds = ds.where((ds > 0) & (ds < 1))
@@ -106,4 +106,11 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
 
     print(ds)
 
-    ds.to_netcdf(out_dir.joinpath(site + '.nc'))
+    from dask.diagnostics import ProgressBar
+
+    out_file = out_dir.joinpath(site + '.nc')
+    ds.to_netcdf(out_file)
+    # write_job = ds.to_netcdf(out_file, compute=False)
+    # with ProgressBar():
+        # print(f"Writing to {out_file}")
+        # write_job.compute()
