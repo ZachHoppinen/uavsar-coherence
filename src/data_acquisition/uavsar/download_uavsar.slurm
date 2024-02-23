@@ -3,8 +3,8 @@
 #SBATCH -o /bsuhome/zacharykeskinen/uavsar-coherence/logs/%x-%j.log # output and error file name (%j expands to jobID)
 #SBATCH -n 15 # total number of tasks requested
 #SBATCH -N 1 # number of nodes you want to run on
-#SBATCH -p bsudfq # queue (partition)
-#SBATCH -t 2-00:00:00 # run time (hh:mm:ss) - 2 days.
+#SBATCH -p cryogars # queue (partition)
+#SBATCH -t 0-12:00:00 # run time (hh:mm:ss) - 2 days.
 
 echo "Starting."
 

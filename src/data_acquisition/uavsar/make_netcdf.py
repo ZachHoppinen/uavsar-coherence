@@ -99,4 +99,5 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
 
     print(ds)
 
-    # ds.to_netcdf(out_dir.joinpath(site + '.nc'))
+    if not out_dir.joinpath(site + '.nc').exists():
+        ds.to_netcdf(out_dir.joinpath(site + '.nc'))
