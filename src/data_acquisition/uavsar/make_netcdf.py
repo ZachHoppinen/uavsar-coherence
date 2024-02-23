@@ -74,12 +74,18 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
 
     ds = xr.combine_by_coords(concat_dss).rename({'band_data': 'cor'})
     ds = ds.where((ds > 0) & (ds < 1))
+    
+    incs = []
     for heading, fp in headings.items():
         inc = xr.open_dataarray(list(fp.parent.glob('*.inc.tiff'))[0]).squeeze('band', drop = True)
         inc = inc.rio.reproject_match(concat_dss[0]).expand_dims(heading = [heading])
         inc = inc.where((inc < 100) & (inc > -100))
-        ds['inc'] = inc
-        ds['inc'].plot()
+        incs.append(inc)
+    
+    ds['inc'] = xr.concat(incs, 'heading')
+    
+    for heading in ds.heading.values:
+        ds['inc'].sel(heading = heading).plot()
         plt.savefig(fig_dir.joinpath('inc', site + '_' + str(heading) +'_inc.png'))
         plt.close()
 
