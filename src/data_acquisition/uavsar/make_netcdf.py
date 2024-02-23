@@ -34,6 +34,7 @@ def decimal_degree_to_meters(lat1, lon1, lat2, lon2):  # generally used geo meas
     return d * 1000; # meters
 
 for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
+    if out_dir.joinpath(site + '.nc').exists(): continue
     print(site)
     dss = {value: xr.open_dataarray(value).squeeze('band', drop = True) for key, value in uavsars.items() if site in key.lower()}
     concat_dss = []
@@ -70,7 +71,7 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         ds.attrs['lat_looks'] = row_multi_to30
         ds.attrs['lon_looks'] = col_multi_to30
 
-        concat_dss.append(ds)
+        concat_dss.append(ds.chunk())
 
     ds = xr.combine_by_coords(concat_dss).rename({'band_data': 'cor'})
     ds = ds.where((ds > 0) & (ds < 1))
@@ -105,5 +106,4 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
 
     print(ds)
 
-    if not out_dir.joinpath(site + '.nc').exists():
-        ds.to_netcdf(out_dir.joinpath(site + '.nc'))
+    ds.to_netcdf(out_dir.joinpath(site + '.nc'))
