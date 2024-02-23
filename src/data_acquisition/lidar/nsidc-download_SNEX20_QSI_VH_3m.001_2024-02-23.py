@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+## https://nsidc.org/data/snex20_qsi_vh_3m/versions/1
 # ----------------------------------------------------------------------------
 # NSIDC Data Download Script
 #
