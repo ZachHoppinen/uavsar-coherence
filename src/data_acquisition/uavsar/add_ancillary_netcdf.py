@@ -25,9 +25,10 @@ lc = xr.open_dataarray('/bsuhome/zacharykeskinen/scratch/coherence/land-cover/nl
 
 out_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar/')
 sites = sorted(list(out_dir.glob('*.nc')))
+sites = [s for s in sites if 'full' not in s.stem]
 
 for site in sites:
-    # if site.stem != 'lowman': continue
+    if site.parent.joinpath(site.stem + '_full.nc').exists(): continue
     print(site)
     
     ds = xr.open_dataset(site)
@@ -112,7 +113,8 @@ for site in sites:
     # reproject and mask out areas where the interpolation led to artifacts
     lc_clip = lc_clip.rio.reproject_match(ds['dem'])
     # add to dataset
-    ds['land_cover'] = lc_clip
+    ds['land_cover'] = lc_clip.astype('int64')
+    ds['land_cover'].attrs = {}
 
     ## Adding in plots
 
@@ -140,11 +142,4 @@ for site in sites:
         plt.savefig(fig_dir.joinpath('vh', site.stem+'_vh.png'))
         plt.close()
 
-    print(ds)
-    print(ds.dims)
-    print(ds.coords)
-    print(ds.encoding)
-
-    ds = ds.drop_vars('band').drop_vars('spatial_ref')
-    
-    ds.to_netcdf(site.parent.joinpath(site.stem + '_full.nc'), encoding = {'x': {'dtype':'int16'}, 'y': {'dtype':'int16'}})
+    ds.to_netcdf(site.parent.joinpath(site.stem + '_full.nc')) #, encoding = {'x': {'dtype':'int16'}, 'y': {'dtype':'int16'}})
