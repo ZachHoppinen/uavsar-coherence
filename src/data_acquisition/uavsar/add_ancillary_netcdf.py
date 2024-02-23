@@ -21,9 +21,10 @@ trees = xr.open_dataarray('/bsuhome/zacharykeskinen/scratch/coherence/trees/nlcd
 lc = xr.open_dataarray('/bsuhome/zacharykeskinen/scratch/coherence/land-cover/nlcd_2019_land_cover_l48_20210604.img').squeeze('band', drop =  True)
 
 out_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar/')
-sites = list(out_dir.glob('*.nc'))
+sites = sorted(list(out_dir.glob('*.nc')))
 
 for site in sites:
+    if site.stem != 'lowman': continue
     print(site)
     
     ds = xr.open_dataset(site)
@@ -33,8 +34,61 @@ for site in sites:
     geom = ds.rio.bounds()
     ds['dem'] = py3dep.get_dem(geom, 30).drop_vars('spatial_ref').rio.write_crs('EPSG:4326').rio.reproject_match(ds)
 
-    
+    ## Adding in lidar
+    lidar_abbrev = {'stlake': 'USUTLC', 'silver': 'USIDRC', 'lowman': ['USIDDC', 'USIDMC', 'USIDBS'], 'grmesa': 'USCOGM', 'fraser': 'USCOFR', 'rockmt': 'USCOCP'}
+    # note we are overwritting one of the VH if there are two. But we only need one measurement of VH
+    VHs = {fp.stem.split('_')[4]:fp for fp in Path('/bsuhome/zacharykeskinen/scratch/coherence/lidar').glob('*VH*.tif')}
+    # here we grab snow depth specifically
+    SDs = {'_'.join(fp.stem.split('_')[4:6]):fp for fp in Path('/bsuhome/zacharykeskinen/scratch/coherence/lidar').glob('*SD*.tif')}
+
+    from contextlib import suppress
+    # with suppress(KeyError): 
+    if site.stem != 'lowman' and site.stem in lidar_abbrev.keys():
+        vh_fp = VHs[lidar_abbrev[site.stem]]
+        date = vh_fp.stem.split('_')[5]
+        vh = xr.open_dataarray(vh_fp).squeeze('band', drop = True).rio.reproject_match(ds['dem']).expand_dims(time = [pd.to_datetime(date)])
+        ds['vh'] = vh.where((vh < 100) & (vh > 0))
+
+        ds['vh'].plot()
+        plt.savefig(fig_dir.joinpath('vh', site.stem+'_vh.png'))
+        plt.close()
+
+        try:
+            sd_fps = [value for key, value in SDs.items() if lidar_abbrev[site.stem] in key]
+            sds = []
+            for sd_fp in sd_fps:
+                date = sd_fp.stem.split('_')[5]
+                sd = xr.open_dataarray(sd_fp).squeeze('band', drop = True).rio.reproject_match(ds['dem']).expand_dims(time = [pd.to_datetime(date)])
+                sd = sd.where((sd > 0) & (sd < 30))
+                sds.append(sd)
+
+            if len(sds) == 1: sd = sds[0]
+            else: sd = xr.concat(sds, 'time')
+
+            ds['sd'] = sd
+
+            for t in ds.time:
+                if (~ds['sd'].sel(time = t).isnull()).sum == 0: continue
+                ds['sd'].sel(time = t).plot()
+                plt.savefig(fig_dir.joinpath('sd', site.stem+'_sd.png'))
+                plt.close()
+
+
+        except KeyError: pass
+
+    elif site.stem == 'lowman':
+        lowman_lidars = {'vh': [], 'sd': []}
+        for lidar_name in lidar_abbrev[site.stem]:
+            lowman_lidars['vh'].extend(VHs[lidar_name])
+            lowman_lidars['sd'].extend([value for key, value in SDs.items() if lidar_name in key])
+        
+        print(lowman_lidars)
+        
+    else:
+        print('no lidar')
+
     print(ds)
+
     continue
 
     ## Adding in trees
