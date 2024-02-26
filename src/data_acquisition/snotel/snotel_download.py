@@ -2,6 +2,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import xarray as xr
 import geopandas as gpd
 from shapely import wkb, wkt
 from shapely.geometry import box, Polygon
@@ -18,8 +19,8 @@ from metloom.pointdata import SnotelPointData, CDECPointData
 from metloom.variables import SnotelVariables, CdecStationVariables
 
 from rasterio import features
-def vectorize_valid(fp):
-    img = rxa.open_rasterio(fp).squeeze('band')
+def vectorize_valid(img):
+    # img = rxa.open_rasterio(fp).squeeze('band')
     img = ~img.isnull()
     img = img.astype('uint8')
     mask = img == 1
@@ -39,12 +40,25 @@ uavsars = list(uavsar_dir.glob('*_full.nc'))
 # remove tmp dir
 uavsars = [u for u in uavsars if u != 'tmp']
 # get location and flight direction for key and first coherence tiff as value of dictionary
-uavsars = {u.stem.replace('_full', '').split('_')[0]: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
+uavsars = {fp.stem.replace('_full', ''): xr.open_dataset(fp) for fp in uavsars}
 # convert rasterio image to valid geometry polygon
-
-uavsars = {u: vectorize_valid(v) for u, v in tqdm(uavsars.items())}
+from itertools import product
+bounds = {}
+for stem, ds in tqdm(uavsars.items()):
+    for t1, t2 in product(ds.time1, ds.time2):
+        if (~ds['cor'].sel(time1 = t1, time2 = t2).isel(heading = 0, pol = 0).isnull()).sum() == 0: continue
+        img = ds['cor'].sel(time1 = t1, time2 = t2).isel(heading = 0, pol = 0)
+        img = ~img.isnull()
+        img = img.astype('uint8')
+        mask = img == 1
+        coords = list((features.shapes(img, mask = mask)))[0][0]['coordinates'][0]
+        xy_coords = [(img.x[int(x)-1].values.ravel()[0], img.y[int(y)-1].values.ravel()[0]) for x, y in coords]
+        p = Polygon(xy_coords)
+        bounds[stem] = p
+        break
+# uavsars = {u: vectorize_valid(v) for u, v in tqdm(uavsars.items())}
 # convert to geodataframe
-bounds = gpd.GeoDataFrame(uavsars.values(), index = uavsars.keys(), columns = ['geometry'])
+bounds = gpd.GeoDataFrame(bounds.values(), index = bounds.keys(), columns = ['geometry'])
 bounds = bounds.set_crs('EPSG:4326')
 
 # bounds_fp = Path('/bsuhome/zacharykeskinen/uavsar-coherence/data/uavsar-bounds/snowex-uavsar-bounds-v2.shp')
