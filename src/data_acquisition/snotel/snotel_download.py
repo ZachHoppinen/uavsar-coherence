@@ -28,9 +28,12 @@ def vectorize_valid(fp):
     return Polygon(xy_coords)
 
 print('Starting...')
-fig_dir = Path('/bsuhome/zacharykeskinen/uavsar-coherence/figures/snotels')
+home_dir = Path('/Users/rdcrlzh1/Documents/uavsar-coherence/')
+fig_dir = home_dir.joinpath('figures', 'snotels')
 
 uavsar_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/uavsar')
+uavsar_dir = Path('/Users/rdcrlzh1/Documents/uavsar-coherence/uavsar')
+
 # get list of uavsars directories
 uavsars = list(uavsar_dir.glob('*'))
 # remove tmp dir
@@ -50,7 +53,7 @@ bounds = bounds.set_crs('EPSG:4326')
 
 # https://www.nrcs.usda.gov/wps/portal/wcc/home/quicklinks/stateSnowPrograms#version=167&elements=W,D&networks=!SCAN,SNTLT,OTHER,SNOW&states=!&counties=!&hucs=&minElevation=&maxElevation=&elementSelectType=all&activeOnly=true&activeForecastPointsOnly=false&hucLabels=false&hucIdLabels=false&hucParameterLabels=true&stationLabels=&overlays=&hucOverlays=2&basinOpacity=75&basinNoDataOpacity=25&basemapOpacity=100&maskOpacity=0&mode=stations&openSections=dataElement,parameter,date,basin,options,elements,location,networks,stationList&controlsOpen=true&popup=&popupMulti=&popupBasin=&base=esriNgwm&displayType=inventory&basinType=6&dataElement=WTEQ&depth=-8&parameter=PCTMED&frequency=DAILY&duration=I&customDuration=&dayPart=E&year=2024&month=1&day=25&monthPart=E&forecastPubMonth=1&forecastPubDay=1&forecastExceedance=50&useMixedPast=true&seqColor=1&divColor=7&scaleType=D&scaleMin=&scaleMax=&referencePeriodType=POR&referenceBegin=1991&referenceEnd=2020&minimumYears=20&hucAssociations=true&lat=40.00&lon=-99.00&zoom=4.0
 
-snotels = pd.read_csv('/bsuhome/zacharykeskinen/uavsar-coherence/data/snotel/snotel-list.csv')
+snotels = pd.read_csv(home_dir.joinpath('data', 'snotel', 'snotel-list.csv'))
 snotels = gpd.GeoDataFrame(snotels, geometry=gpd.points_from_xy(snotels.Longitude, snotels.Latitude), crs='epsg:4326')
 
 fig, ax= plt.subplots()
@@ -81,7 +84,7 @@ ax.set_xlim(-125, -105)
 ax.set_ylim(33, 48)
 plt.savefig(fig_dir.joinpath('snotel_uavsar.png'))
 
-snotel_data_dir = Path('/bsuhome/zacharykeskinen/scratch/coherence/snotels/')
+snotel_data_dir = home_dir.joinpath('data', 'snotel')
 intersect.to_file(snotel_data_dir.joinpath('uavsar-snotels.shp'))
 
 state_abbr = {'Colorado':'CO', 'Idaho': 'ID', 'California':'CA', 'New Mexico': 'NM', 'Utah': 'UT', 'Montana': 'MT'}
