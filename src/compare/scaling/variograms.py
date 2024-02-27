@@ -32,9 +32,9 @@ uavsars = [u for u in uavsars if u != 'tmp']
 uavsars = {u.stem: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(list(u.glob('*.cor.grd.tiff'))) > 0}
 
 n = 1000
-fig, ax = plt.subplots()
+fig, axes = plt.subplots(2, 1)
 for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
-    if i == 4: break
+    # if i == 2: break
     img = rxa.open_rasterio(fp).squeeze('band', drop = True)
     img = img.rio.write_crs('EPSG:4326').rio.reproject(dst_crs = img.rio.estimate_utm_crs())
     img = img.where((img > 0) & (img < 1))
@@ -62,11 +62,19 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
 
 
     V = skg.Variogram(coords, values, n_lags = 300, bin_func = 'uniform', use_nugget = True, model = 'exponential', maxlag = 1000) # maxlag = 20000, n_lags = 100,
-    V.plot(axes = ax, grid = False, show = False, hist = False)
+    V.plot(axes = axes[0], grid = False, show = False, hist = False)
+    V = skg.Variogram(coords, values, n_lags = 300, bin_func = 'uniform', use_nugget = True, model = 'exponential', maxlag = 100) # maxlag = 20000, n_lags = 100,
+    V.plot(axes = axes[1], grid = False, show = False, hist = False)
     # V.distance_difference_plot()
 
-ax.axvline(30)
-# [l.set_color("black") for l in ax.get_lines()]
-# [l.set_linestyle('--') for l in ax.get_lines()[1::2]]
-# [l.set_visible(False) for l in ax.get_lines()[::2]]
+import matplotlib.patches as patches
+rect = patches.Rectangle((100, 0.1), 0.01, 0.01, linewidth=1, edgecolor='black', facecolor='none')
+axes[0].add_patch(rect)
+
+for ax in axes:
+    [l.set_color("black") for l in ax.get_lines()]
+    [l.set_linestyle('--') for l in ax.get_lines()[1::2]]
+    [l.set_visible(False) for l in ax.get_lines()[::2]]
+    ax.axvline(30)
+
 fig.savefig(fig_dir.joinpath('test.png'))
