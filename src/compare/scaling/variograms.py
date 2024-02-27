@@ -45,20 +45,23 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
     coords = np.array(coords)[~np.isnan(values)]
     values = values[~np.isnan(values)]
     
-    print(len(values))
-    print(img.std().values)
+    # print(len(values))
+    # print(img.std().values)
 
-    fig_sub, ax_sub = plt.subplots()
-    img.plot(ax = ax_sub)
-    ax_sub.scatter(coords[:, 0], coords[:, 1], marker = 'x', s = 1, color = 'black')
-    fig_sub.savefig(fig_dir.joinpath('sampling', f'sampling_{uavsar}.png'))
-    plt.close(fig_sub)
-    for (coarsen_x, coarsen_y), res in zip([(1,1), (2,2),(4,4),(6,6), (10,10), (20,20)], ['5m', '10m', '20m', '30m', '50m', '100m']):
+    if not fig_dir.joinpath('sampling', f'sampling_{uavsar}.png').exists():
         fig_sub, ax_sub = plt.subplots()
-        img.coarsen(x = coarsen_x, y= coarsen_y, boundary = 'trim').mean().plot(ax = ax_sub)
-        ax_sub.set_title(f'Resolution = {res}')
-        fig_sub.savefig(fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png'))
+        img.plot(ax = ax_sub)
+        ax_sub.scatter(coords[:, 0], coords[:, 1], marker = 'x', s = 1, color = 'black')
+        fig_sub.savefig(fig_dir.joinpath('sampling', f'sampling_{uavsar}.png'))
         plt.close(fig_sub)
+    res = '100m'
+    if not fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png').exists():
+        for (coarsen_x, coarsen_y), res in zip([(1,1), (2,2),(4,4),(6,6), (10,10), (20,20)], ['5m', '10m', '20m', '30m', '50m', '100m']):
+            fig_sub, ax_sub = plt.subplots()
+            img.coarsen(x = coarsen_x, y= coarsen_y, boundary = 'trim').mean().plot(ax = ax_sub)
+            ax_sub.set_title(f'Resolution = {res}')
+            fig_sub.savefig(fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png'))
+            plt.close(fig_sub)
 
 
     V = skg.Variogram(coords, values, n_lags = 300, bin_func = 'uniform', use_nugget = True, model = 'exponential', maxlag = 1000) # maxlag = 20000, n_lags = 100,
@@ -67,9 +70,9 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
     V.plot(axes = axes[1], grid = False, show = False, hist = False)
     # V.distance_difference_plot()
 
-import matplotlib.patches as patches
-rect = patches.Rectangle((100, 0.1), 0.01, 0.01, linewidth=1, edgecolor='black', facecolor='none')
-axes[0].add_patch(rect)
+# import matplotlib.patches as patches
+# rect = patches.Rectangle((ax.get_ylim()[1], 0.1), 0.01, 0.01, linewidth=1, edgecolor='black', facecolor='none')
+# axes[0].add_patch(rect)
 
 for ax in axes:
     [l.set_color("black") for l in ax.get_lines()]
