@@ -45,7 +45,8 @@ for site in np.unique([k.split('_')[0] for k in uavsars.keys()]):
         ann = pd.read_csv(list(fp.parent.glob('*.csv'))[0], index_col = 0)
         
         t1, t2 = ann.loc['value', 'start time of acquisition for pass 1'], ann.loc['value', 'start time of acquisition for pass 2']
-        t1, t2 = pd.to_datetime(t1), pd.to_datetime(t2)
+        # round to day to match heading dates
+        t1, t2 = pd.to_datetime(t1).round('d'), pd.to_datetime(t2).round('d')
         # heading = ann.loc['value', 'peg heading']
         heading = int(fp.stem.split('_')[1][:3])
         if heading not in headings: headings[heading] = fp
