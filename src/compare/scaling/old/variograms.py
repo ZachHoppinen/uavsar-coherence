@@ -41,6 +41,7 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
     img = rxa.open_rasterio(fp).squeeze('band', drop = True)
     img = img.rio.write_crs('EPSG:4326').rio.reproject(dst_crs = img.rio.estimate_utm_crs())
     img = img.where((img > 0) & (img < 1))
+    # crop out center 5km
     img = img.sel(x = slice(img.x.mean() - 2500, img.x.mean() + 2500), y = slice(img.y.mean() +2500, img.y.mean() - 2500))
     img = img.dropna('x', how = 'all').dropna('y', how = 'all')
     coords = list(product(np.random.choice(img.x, 100), np.random.choice(img.y, 100)))
@@ -51,20 +52,20 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
     # print(len(values))
     # print(img.std().values)
 
-    if not fig_dir.joinpath('sampling', f'sampling_{uavsar}.png').exists():
-        fig_sub, ax_sub = plt.subplots()
-        img.plot(ax = ax_sub)
-        ax_sub.scatter(coords[:, 0], coords[:, 1], marker = 'x', s = 1, color = 'black')
-        fig_sub.savefig(fig_dir.joinpath('sampling', f'sampling_{uavsar}.png'))
-        plt.close(fig_sub)
-    res = '100m'
-    if not fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png').exists():
-        for (coarsen_x, coarsen_y), res in zip([(1,1), (2,2),(4,4),(6,6), (10,10), (20,20)], ['5m', '10m', '20m', '30m', '50m', '100m']):
-            fig_sub, ax_sub = plt.subplots()
-            img.coarsen(x = coarsen_x, y= coarsen_y, boundary = 'trim').mean().plot(ax = ax_sub)
-            ax_sub.set_title(f'Resolution = {res}')
-            fig_sub.savefig(fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png'))
-            plt.close(fig_sub)
+    # if not fig_dir.joinpath('sampling', f'sampling_{uavsar}.png').exists():
+    #     fig_sub, ax_sub = plt.subplots()
+    #     img.plot(ax = ax_sub)
+    #     ax_sub.scatter(coords[:, 0], coords[:, 1], marker = 'x', s = 1, color = 'black')
+    #     fig_sub.savefig(fig_dir.joinpath('sampling', f'sampling_{uavsar}.png'))
+    #     plt.close(fig_sub)
+    # res = '100m'
+    # if not fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png').exists():
+    #     for (coarsen_x, coarsen_y), res in zip([(1,1), (2,2),(4,4),(6,6), (10,10), (20,20)], ['5m', '10m', '20m', '30m', '50m', '100m']):
+    #         fig_sub, ax_sub = plt.subplots()
+    #         img.coarsen(x = coarsen_x, y= coarsen_y, boundary = 'trim').mean().plot(ax = ax_sub)
+    #         ax_sub.set_title(f'Resolution = {res}')
+    #         fig_sub.savefig(fig_dir.joinpath('coarsen', f'{uavsar}_coarsen_{res}.png'))
+    #         plt.close(fig_sub)
 
 
     V = skg.Variogram(coords, values, n_lags = 300, bin_func = 'uniform', use_nugget = True, model = 'exponential', maxlag = 1000) # maxlag = 20000, n_lags = 100,
