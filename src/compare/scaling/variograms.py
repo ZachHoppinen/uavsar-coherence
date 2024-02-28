@@ -33,7 +33,10 @@ uavsars = {u.stem: list(u.glob('*.cor.grd.tiff'))[0] for u in uavsars if len(lis
 
 n = 1000
 fig, axes = plt.subplots(2, 1)
+locs = []
 for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
+    if uavsar.split('_')[0] in locs: continue
+    locs.append(uavsar.split('_')[0])
     # if i == 2: break
     img = rxa.open_rasterio(fp).squeeze('band', drop = True)
     img = img.rio.write_crs('EPSG:4326').rio.reproject(dst_crs = img.rio.estimate_utm_crs())
@@ -73,6 +76,8 @@ for i, (uavsar, fp) in tqdm(enumerate(uavsars.items()), total = len(uavsars)):
 # import matplotlib.patches as patches
 # rect = patches.Rectangle((ax.get_ylim()[1], 0.1), 0.01, 0.01, linewidth=1, edgecolor='black', facecolor='none')
 # axes[0].add_patch(rect)
+axes[0].set_xlabel('')
+axes[0].set_xlabel('Lag [m]')
 
 for ax in axes:
     [l.set_color("black") for l in ax.get_lines()]
