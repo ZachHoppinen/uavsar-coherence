@@ -119,7 +119,7 @@ for loc, d in loc_colors.items():
         dt = t2 - t1
 
         # plot temporal baseline variograms
-        ax = axes.ravel()[2]
+        ax = axes.ravel()[1]
         V = skg.Variogram(coords, values, n_lags = n_lags, bin_func = bin_func, use_nugget = True, model = model, maxlag = max_lag) # maxlag = 20000, n_lags = 100,
         V.plot(axes = ax, grid = False, show = False, hist = False)
         [l.set_color(dt_cmap(dt_norm(dt.days))) for l in ax.get_lines()[-2:]]
@@ -130,7 +130,7 @@ for loc, d in loc_colors.items():
         V.plot(axes = ax, grid = False, show = False, hist = False)
         [l.set_color(t_cmap(winter_month)) for l in ax.get_lines()[-2:]]
 
-        for ax in axes.ravel()[2:4]:
+        for ax in [axes.ravel()[1], axes.ravel()[3]]:
             lns = ax.get_lines()
             lns[-2].set_visible(False)
             lns[-1].set_linestyle('--')
@@ -163,7 +163,7 @@ for loc, d in loc_colors.items():
     # plot polarizaton variograms
     for (pol1, c), (pol2, v) in zip(pol_coords.items(), pol_values.items()):
         assert pol1 == pol2
-        ax = axes.ravel()[1]
+        ax = axes.ravel()[2]
         V = skg.Variogram(c, v, n_lags = n_lags, bin_func = bin_func, use_nugget = True, model = model, maxlag = max_lag) # maxlag = 20000, n_lags = 100,
         V.plot(axes = ax, grid = False, show = False, hist = False)
         lns = ax.get_lines()
@@ -173,9 +173,9 @@ for loc, d in loc_colors.items():
         ax.plot([], [], color = pol_cols[pol1], label = pol1, alpha = 1)
     
     # add colorbars
-    for ax in axes.ravel()[:2]: divider = make_axes_locatable(ax); cax = divider.append_axes('right', size='5%', pad=0.05); cax.axis('off')
+    # for ax in axes.ravel()[:2]: divider = make_axes_locatable(ax); cax = divider.append_axes('right', size='5%', pad=0.05); cax.axis('off')
     # temporal baselines
-    ax = axes.ravel()[2]
+    ax = axes.ravel()[1]
     divider = make_axes_locatable(ax)
     cax = divider.append_axes('right', size='5%', pad=0.05)
     fig.colorbar(mpl.cm.ScalarMappable(norm=dt_norm, cmap=dt_cmap), cax=cax, orientation='vertical', label = 'Temporal Baseline [days]')
@@ -186,14 +186,14 @@ for loc, d in loc_colors.items():
     fig.colorbar(mpl.cm.ScalarMappable(cmap= t_cmap, norm = t_norm), cax=cax, orientation='vertical', label = 'Water Year Month')
     ax.set_title('Water Year Month')
 
-axes[0, 0].legend(ncols = 3, loc='upper center', bbox_to_anchor=(1, 1.5),fancybox=True, shadow=True)
+axes[0, 0].legend(ncols = 3, loc='upper center', bbox_to_anchor=(1.3, 1.6),fancybox=True, shadow=True)
 axes[0, 0].set_title('Sites')
 
-axes[0, 1].legend(ncols = 2, loc='best',fancybox=True, shadow=True)
-axes[0, 1].set_title('Polarization')
+axes[1, 0].legend(ncols = 2, loc='best',fancybox=True, shadow=True)
+axes[1, 0].set_title('Polarization')
 
 for ax in axes.ravel():
-    ax.set_ylim(-0.01, 0.1)
+    ax.set_ylim(0.01, 0.08)
 
 for ax in axes[:, 1:].ravel(): 
     ax.set_yticklabels([])
