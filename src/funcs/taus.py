@@ -5,7 +5,7 @@ def fit_coh_decay_model(cohs, days, tau_guess, bounds, xtol, ftol, gamma_inf_gue
     # https://rowannicholls.github.io/python/curve_fitting/exponential.html
 
     # Fit the function a * np.exp(b * t) + c to x and y
-    params, pcov = curve_fit(lambda t, gamma_inf, tau: gamma_inf + (1 - gamma_inf) * np.exp(- t / tau), x, y, p0=(gamma_inf_guess, tau_guess),\
+    params, pcov = curve_fit(lambda t, gamma_inf, tau: gamma_inf + (1 - gamma_inf) * np.exp(- t / tau), days, cohs, p0=(gamma_inf_guess, tau_guess),\
         bounds = bounds, ftol = ftol, xtol = xtol)
 
     gamma_inf, tau = params
