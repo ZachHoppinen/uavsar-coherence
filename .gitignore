@@ -131,3 +131,4 @@ dmypy.json
 logs/
 
 uavsar/
+data/dem/
