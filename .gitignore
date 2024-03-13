@@ -132,3 +132,5 @@ logs/
 
 uavsar/
 data/dem/
+
+*.DS_Store
