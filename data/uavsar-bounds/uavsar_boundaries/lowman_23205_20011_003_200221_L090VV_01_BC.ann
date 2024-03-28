@@ -1,0 +1,477 @@
+; Parameter file for UAVSAR stackline lowman_23205_20011_003_200221_L090VV_01_BC 
+; search for parameters/value rather than placement in file
+;
+; slc = single look complex slant range image
+; slc_mag and slc_phase are derived from the same 8 bytes per pixel of the slc input file, 
+; where the first 4 bytes contain the real part of the complex data and the second 4 bytes contain the imaginary part of the complex data
+;
+; llh = latitude/longitude/dem height of each pixel in the slc
+; LAT/LONG/HGT are packed as 3 floating point values per slc pixel (data order: lat1 lon1 hgt1 lat2 lon2 hgt2 ...)
+;
+; lkv = look vector at the target pointing from the aircraft to the ground, in ENU (east, north, up) components
+; look vector ENU components are packed as 3 floating point values per slc pixel (data order: east1 north1 up1 east2 north2 up2)
+;
+; Peg position is the nadir position of aircraft at the middle of the datatake
+; Projection of image is relative to the flightline (S - along track position, C - cross track position)
+; S0, C0 is offset to upper left coordinate of SLC in meters
+
+
+UAVSAR Annotation Type                                   (&)             = Stack InSAR            ; Choices: PolSAR, Browse InSAR, Refined InSAR, Stack InSAR
+UAVSAR Stack Annotation File Version Number              (-)             = 1.4
+
+; General location of data (non-unique)
+
+Site Description                                         (&)             = Lowman, CO
+
+; Stack information
+
+Stack Name                                               (&)             = lowman_23205_01
+Stack Line Number                                        (-)             = 3                      ; Track number in stack
+Number of Segments                                       (-)             = 3
+Flight Line ID                                           (&)             = 23205
+
+; Associated images in the stack           
+
+stackline1                                               (&)             = lowman_23205_20002_007_200131_L090_01_BC
+stackline2                                               (&)             = lowman_23205_20007_003_200213_L090_01_BC
+stackline3                                               (&)             = lowman_23205_20011_003_200221_L090_01_BC
+stackline4                                               (&)             = lowman_23205_20016_004_200311_L090_01_BC
+
+
+; URL of JPL website for precision data
+
+URL                                                      (&)             = http://uavsar.jpl.nasa.gov/cgi-bin/product.pl?jobName=lowman_23205_01
+
+
+; Comments
+
+Flight Plan Comments                                     (&)             =  Nominal chirp 
+Processing Comments                                      (&)             =  N/A 
+
+
+; List of slant range data files
+
+slc_1_1x1                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s1_1x1.slc  ; File Size  4721944448 bytes
+slc_1_1x4                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s1_1x4.slc  ; File Size  1180486112 bytes
+slc_1_2x8                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s1_2x8.slc  ; File Size   295121528 bytes
+llh_1_2x8                                                (&)             = lowman_23205_01_BC_s1_2x8.llh                          ; File Size   442682292 bytes
+lkv_1_2x8                                                (&)             = lowman_23205_01_BC_s1_2x8.lkv                          ; File Size   442682292 bytes
+slc_2_1x1                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s2_1x1.slc  ; File Size  4721944448 bytes
+slc_2_1x4                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s2_1x4.slc  ; File Size  1180486112 bytes
+slc_2_2x8                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s2_2x8.slc  ; File Size   295121528 bytes
+llh_2_2x8                                                (&)             = lowman_23205_01_BC_s2_2x8.llh                          ; File Size   442682292 bytes
+lkv_2_2x8                                                (&)             = lowman_23205_01_BC_s2_2x8.lkv                          ; File Size   442682292 bytes
+slc_3_1x1                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s3_1x1.slc  ; File Size  4584105376 bytes
+slc_3_1x4                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s3_1x4.slc  ; File Size  1146061760 bytes
+slc_3_2x8                                                (&)             = lowman_23205_20011_003_200221_L090VV_01_BC_s3_2x8.slc  ; File Size   286515440 bytes
+llh_3_2x8                                                (&)             = lowman_23205_01_BC_s3_2x8.llh                          ; File Size   429773160 bytes
+lkv_3_2x8                                                (&)             = lowman_23205_01_BC_s3_2x8.lkv                          ; File Size   429773160 bytes
+dop                                                      (&)             = lowman_23205_01_BC.dop                                 ; File Size      223501 bytes
+
+
+; Data units
+
+SLC Data Units                                           (&)             = linear amplitude and phase
+LAT Data Units                                           (&)             = decimal degrees        ; latitude is first value in the LLH file
+LON Data Units                                           (&)             = decimal degrees        ; longitude is second value in the LLH file
+HGT Data Units                                           (&)             = meters                 ; height is the third value in the LLH file
+LKV Data Units                                           (&)             = meters
+
+
+; Data format
+
+SLC Bytes Per Pixel                                      (bytes)         = 8
+LLH Bytes Per Pixel                                      (bytes)         = 12
+LKV Bytes Per Pixel                                      (bytes)         = 12
+SLC Pixel Format                                         (&)             = Complex
+LLH Pixel Format                                         (&)             = latitude, longitude, height
+LKV Pixel Format                                         (&)             = east, north, up
+
+; File size parameters
+
+slc_1_1x1 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x1 segment 1
+slc_1_1x1 Rows                                           (pixels)        = 66664                  ; lines in SLC 1x1 segment 1
+slc_1_1x4 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x4 segment 1
+slc_1_1x4 Rows                                           (pixels)        = 16666                  ; lines in SLC 1x4 segment 1
+slc_1_2x8 Columns                                        (pixels)        = 4427                   ; samples in SLC 2x8 segment 1
+slc_1_2x8 Rows                                           (pixels)        = 8333                   ; lines in SLC 2x8 segment 1
+llh_1_2x8 Columns                                        (pixels)        = 4427                   ; samples in LLH segment 1
+llh_1_2x8 Rows                                           (pixels)        = 8333                   ; lines in LLH segment 1
+lkv_1_2x8 Columns                                        (pixels)        = 4427                   ; samples in LKV segment 1
+lkv_1_2x8 Rows                                           (pixels)        = 8333                   ; lines in LKV segment 1
+slc_2_1x1 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x1 segment 2
+slc_2_1x1 Rows                                           (pixels)        = 66664                  ; lines in SLC 1x1 segment 2
+slc_2_1x4 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x4 segment 2
+slc_2_1x4 Rows                                           (pixels)        = 16666                  ; lines in SLC 1x4 segment 2
+slc_2_2x8 Columns                                        (pixels)        = 4427                   ; samples in SLC 2x8 segment 2
+slc_2_2x8 Rows                                           (pixels)        = 8333                   ; lines in SLC 2x8 segment 2
+llh_2_2x8 Columns                                        (pixels)        = 4427                   ; samples in LLH segment 2
+llh_2_2x8 Rows                                           (pixels)        = 8333                   ; lines in LLH segment 2
+lkv_2_2x8 Columns                                        (pixels)        = 4427                   ; samples in LKV segment 2
+lkv_2_2x8 Rows                                           (pixels)        = 8333                   ; lines in LKV segment 2
+slc_3_1x1 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x1 segment 3
+slc_3_1x1 Rows                                           (pixels)        = 64718                  ; lines in SLC 1x1 segment 3
+slc_3_1x4 Columns                                        (pixels)        = 8854                   ; samples in SLC 1x4 segment 3
+slc_3_1x4 Rows                                           (pixels)        = 16180                  ; lines in SLC 1x4 segment 3
+slc_3_2x8 Columns                                        (pixels)        = 4427                   ; samples in SLC 2x8 segment 3
+slc_3_2x8 Rows                                           (pixels)        = 8090                   ; lines in SLC 2x8 segment 3
+llh_3_2x8 Columns                                        (pixels)        = 4427                   ; samples in LLH segment 3
+llh_3_2x8 Rows                                           (pixels)        = 8090                   ; lines in LLH segment 3
+lkv_3_2x8 Columns                                        (pixels)        = 4427                   ; samples in LKV segment 3
+lkv_3_2x8 Rows                                           (pixels)        = 8090                   ; lines in LKV segment 3
+
+
+; Acquisition parameters
+
+Acquisition Mode                                         (&)             = PolSAR
+Pulse Length                                             (microsec)      = 40.0
+Steering Angle                                           (deg)           = 90                     ; 90 deg is boresight
+Bandwidth                                                (MHz)           = 80.0
+Start Time of Acquisition                                (&)             = 21-Feb-2020 01:53:09 UTC ; note this flight line's synthetic aperture spans 23 seconds since it was flown at an average speed of 212 m/s
+Stop Time of Acquisition                                 (&)             = 21-Feb-2020 02:03:00 UTC ; note this flight line's synthetic aperture spans 23 seconds since it was flown at an average speed of 212 m/s
+Look Direction                                           (&)             = Left
+Ping-Pong or Single Antenna Transmit                     (&)             = Ping-Pong
+Average Along Track Velocity                             (m/s)           = 212.576812
+Minimum Look Angle                                       (deg)           = 34.3327389
+Maximum Look Angle                                       (deg)           = 67.74517084
+Antenna Length                                           (m)             = 1.5
+Hardware Version Number                                  (&)             = N/A   
+
+
+; Common image and track information 
+
+Peg Latitude                                             (deg)           = 44.132819268
+Peg Longitude                                            (deg)           = -115.8135546
+Peg Heading                                              (deg)           = -127.80485581
+Center Wavelength                                        (cm)            = 23.8403545
+Ellipsoid Semi-major Axis                                (m)             = 6378137.0
+Ellipsoid Eccentricity Squared                           (-)             = 0.00669438
+Image Starting Slant Range                               (km)            = 12.4913349             ; for SLC 1x1 data
+Nominal Azimuth Reference Length                         (-)             = 8192
+Global Average Yaw                                       (deg)           = 3.58442305
+Global Average Pitch                                     (deg)           = 1.17050329
+Global Average Roll                                      (deg)           = 0.0
+Global Average ESA                                       (deg)           = -3.63521151
+Global Average Altitude                                  (m)             = 12495.6709
+Global Average Terrain Height                            (m)             = 1721.86079
+Global Average Squint Angle                              (deg)           = 90.2727582
+Average Pulse Repetition Interval                        (ms)            = 2.51422729
+Average Terrain Height                                   (m)             = 1721.94521
+Standard Deviation of Terrain Height                     (m)             = 431.65294
+Average Altitude                                         (m)             = 12495.6709
+
+
+; Image and track information by multilook vector
+            
+Number of Range Looks in 1x1 SLC                         (-)             = 1
+Number of Azimuth Looks in 1x1 SLC                       (-)             = 1
+Number of Range Looks in 1x4 SLC                         (-)             = 1
+Number of Azimuth Looks in 1x4 SLC                       (-)             = 4
+Number of Range Looks in 2x8 SLC                         (-)             = 2
+Number of Azimuth Looks in 2x8 SLC                       (-)             = 8
+1x1 SLC Range Pixel Spacing                              (m)             = 1.66551366
+1x1 SLC Azimuth Pixel Spacing                            (m)             = 0.6
+1x4 SLC Range Pixel Spacing                              (m)             = 1.66551366
+1x4 SLC Azimuth Pixel Spacing                            (m)             = 2.4
+2x8 SLC Range Pixel Spacing                              (m)             = 3.33102732
+2x8 SLC Azimuth Pixel Spacing                            (m)             = 4.8
+2x8 LLH Range Pixel Spacing                              (m)             = 3.33102732
+2x8 LLH Azimuth Pixel Spacing                            (m)             = 4.8
+2x8 LKV Range Pixel Spacing                              (m)             = 3.33102732
+2x8 LKV Azimuth Pixel Spacing                            (m)             = 4.8
+Segment 1 Data Starting Azimuth                          (m)             = -62889.6026
+Segment 2 Data Starting Azimuth                          (m)             = -22891.2026
+Segment 3 Data Starting Azimuth                          (m)             = 17107.1974
+Segment 1 Data Approximate Corner 1                      (&)             = 44.429470062, -115.134437561       ; latitude, longitude in decimal degrees
+Segment 1 Data Approximate Corner 2                      (&)             = 44.297889709, -114.998489380       ; latitude, longitude in decimal degrees
+Segment 1 Data Approximate Corner 3                      (&)             = 44.213294983, -115.535316467       ; latitude, longitude in decimal degrees
+Segment 1 Data Approximate Corner 4                      (&)             = 44.079753876, -115.396377563       ; latitude, longitude in decimal degrees
+Segment 2 Data Approximate Corner 1                      (&)             = 44.213287354, -115.535385132       ; latitude, longitude in decimal degrees
+Segment 2 Data Approximate Corner 2                      (&)             = 44.079727173, -115.396415710       ; latitude, longitude in decimal degrees
+Segment 2 Data Approximate Corner 3                      (&)             = 43.998554230, -115.936393738       ; latitude, longitude in decimal degrees
+Segment 2 Data Approximate Corner 4                      (&)             = 43.861438751, -115.792701721       ; latitude, longitude in decimal degrees
+Segment 3 Data Approximate Corner 1                      (&)             = 43.998527527, -115.936439514       ; latitude, longitude in decimal degrees
+Segment 3 Data Approximate Corner 2                      (&)             = 43.861415863, -115.792755127       ; latitude, longitude in decimal degrees
+Segment 3 Data Approximate Corner 3                      (&)             = 43.789024353, -116.323341370       ; latitude, longitude in decimal degrees
+Segment 3 Data Approximate Corner 4                      (&)             = 43.648136139, -116.174674988       ; latitude, longitude in decimal degrees
+
+
+; Processing parameters
+
+Processing Mode                                          (&)             = RPI
+Polarization                                             (&)             = VV
+Precision DGPS Solution                                  (&)             = Post-Processed         ; Real-Time or Post-Processed
+RFI Removed                                              (&)             = Yes
+Adaptive RFI Removal Applied                             (&)             = No
+Mocomp I Applied                                         (&)             = Yes
+Mocomp II Applied                                        (&)             = Yes
+Topo Mocomp Applied                                      (&)             = Yes
+DEM Used in Topo Mocomp                                  (&)             = SRTM1 v3
+DEM Datum                                                (&)             = WGS-84
+DEM Source                                               (&)             = http://uavsar.jpl.nasa.gov/doc/dem.htm
+DEM Interpolation Method                                 (&)             = Bilinear
+DEM Original Pixel Spacing                               (arcsec)        = 1
+DEM Citation Count                                       (-)             = 0
+Reskew Doppler                                           (&)             = Global Doppler
+Correlation Threshold                                    (&)             = N/A
+Residual Baseline Estimation Method                      (&)             = Phase v3               ; Ampcor, Ampcor v1, Phase, Phase v2, Phase v3
+Stack Coregistration Reference                           (&)             = Sequential             ; Sequential or TrackN
+Number of Baseline Iterations                            (-)             = 1
+Length of Processed Data                                 (km)            = 118.827
+Date of Processing                                       (&)             = 30-Mar-2021
+Processor Version Number                                 (&)             = 12c90cccfe6b842bee6087b9de5f1305272a2704
+Post Processor Version Number                            (&)             = 9c4731dd363a00ea94516c450d262e7ac61830ee
+
+
+; Radiometric calibration parameters
+
+Antenna Pattern Radiometric Correction Applied           (&)             = Yes
+Range Dependent Radiometric Correction Applied           (&)             = Yes
+Flat Earth Area Correction Factor in Slant Plane Applied (&)             = Yes
+DEM Slope Calibration Applied                            (&)             = No
+Cross Talk Removed                                       (&)             = No
+Apply Receive Cal Pulse Phase                            (&)             = Yes
+Apply Transmit Cal Pulse Phase                           (&)             = Yes
+Sigma Nought Bias LRTI80                                 (-)             = 0.06902713
+Noise Calibration Constant LRTI80                        (-)             = 0.0
+ISLR Noise Calibration Term LRTI80                       (-)             = 0.0
+Polarimetrically Calibrated                              (&)             = Yes
+
+; Display parameters (mdx header)
+;
+; To display SLC segment 1, 1x1 looks amplitude and phase in mdx:
+; mdx -h lowman_23205_20011_003_200221_L090VV_01_BC.ann -set slc_1_1x1_mag lowman_23205_20011_003_200221_L090VV_01_BC_s1_1x1.slc -PER -percent 95 -exp .5 -set slc_1_1x1_phase lowman_23205_20011_003_200221_L090VV_01_BC_s1_1x1.slc
+;
+; To display LLH segment 1 latitude, longitude, height in mdx:
+; mdx -h lowman_23205_20011_003_200221_L090VV_01_BC.ann -set llh_1_2x8 lowman_23205_01_BC_s1_2x8.llh -chdr 0 -ctlr 8 lowman_23205_01_BC_s1_2x8.llh -chdr 4 -ctlr 4 lowman_23205_01_BC_s1_2x8.llh -chdr 8 -wrap 300
+; 
+; To display LKV segment 1 look vector:
+; mdx -h lowman_23205_20011_003_200221_L090VV_01_BC.ann -set llh_1_2x8 lowman_23205_01_BC_s1_2x8.lkv -chdr 0 -ctlr 8 lowman_23205_01_BC_s1_2x8.lkv -chdr 4 -ctlr 4 lowman_23205_01_BC_s1_2x8.lkv -chdr 8 
+
+set_name                                                 (&)             =                        ; layers described
+slc_1_1x1_mag.set_rows                                   (pixels)        = 66664                  ; SLC lines
+slc_1_1x1_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_1_1x1_mag.row_addr                                   (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_1x1_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_1_1x1_mag.row_mult                                   (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_1_1x1_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_1_1x1_phase.set_rows                                 (pixels)        = 66664                  ; SLC lines
+slc_1_1x1_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_1_1x1_phase.row_addr                                 (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_1x1_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_1_1x1_phase.row_mult                                 (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_1_1x1_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_1_1x4_mag.set_rows                                   (pixels)        = 16666                  ; SLC lines
+slc_1_1x4_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_1_1x4_mag.row_addr                                   (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_1x4_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_1_1x4_mag.row_mult                                   (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_1_1x4_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_1_1x4_phase.set_rows                                 (pixels)        = 16666                  ; SLC lines
+slc_1_1x4_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_1_1x4_phase.row_addr                                 (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_1x4_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_1_1x4_phase.row_mult                                 (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_1_1x4_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_1_2x8_mag.set_rows                                   (pixels)        = 8333                   ; SLC lines
+slc_1_2x8_mag.set_cols                                   (pixels)        = 4427                   ; SLC samples
+slc_1_2x8_mag.row_addr                                   (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_2x8_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_1_2x8_mag.row_mult                                   (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_1_2x8_mag.col_mult                                   (m/pixel)       = 3.33102732             ; SLC slant range spacing
+slc_1_2x8_phase.set_rows                                 (pixels)        = 8333                   ; SLC lines
+slc_1_2x8_phase.set_cols                                 (pixels)        = 4427                   ; SLC samples
+slc_1_2x8_phase.row_addr                                 (m)             = -62889.6026            ; SLC starting azimuth
+slc_1_2x8_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_1_2x8_phase.row_mult                                 (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_1_2x8_phase.col_mult                                 (m/pixel)       = 3.33102732             ; SLC slant range spacing
+llh_1_2x8.set_rows                                       (pixels)        = 8333                   ; LLH lines
+llh_1_2x8.set_cols                                       (pixels)        = 4427                   ; LLH samples
+llh_1_2x8.row_addr                                       (deg)           = 44.4295                ; latitude at center of first pixel in 2x8 image
+llh_1_2x8.col_addr                                       (deg)           = -115.134               ; longitude at center of first pixel in 2x8 image
+lkv_1_2x8.set_rows                                       (pixels)        = 8333                   ; LKV lines
+lkv_1_2x8.set_cols                                       (pixels)        = 4427                   ; LKV samples
+slc_2_1x1_mag.set_rows                                   (pixels)        = 66664                  ; SLC lines
+slc_2_1x1_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_2_1x1_mag.row_addr                                   (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_1x1_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_2_1x1_mag.row_mult                                   (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_2_1x1_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_2_1x1_phase.set_rows                                 (pixels)        = 66664                  ; SLC lines
+slc_2_1x1_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_2_1x1_phase.row_addr                                 (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_1x1_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_2_1x1_phase.row_mult                                 (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_2_1x1_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_2_1x4_mag.set_rows                                   (pixels)        = 16666                  ; SLC lines
+slc_2_1x4_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_2_1x4_mag.row_addr                                   (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_1x4_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_2_1x4_mag.row_mult                                   (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_2_1x4_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_2_1x4_phase.set_rows                                 (pixels)        = 16666                  ; SLC lines
+slc_2_1x4_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_2_1x4_phase.row_addr                                 (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_1x4_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_2_1x4_phase.row_mult                                 (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_2_1x4_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_2_2x8_mag.set_rows                                   (pixels)        = 8333                   ; SLC lines
+slc_2_2x8_mag.set_cols                                   (pixels)        = 4427                   ; SLC samples
+slc_2_2x8_mag.row_addr                                   (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_2x8_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_2_2x8_mag.row_mult                                   (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_2_2x8_mag.col_mult                                   (m/pixel)       = 3.33102732             ; SLC slant range spacing
+slc_2_2x8_phase.set_rows                                 (pixels)        = 8333                   ; SLC lines
+slc_2_2x8_phase.set_cols                                 (pixels)        = 4427                   ; SLC samples
+slc_2_2x8_phase.row_addr                                 (m)             = -22891.2026            ; SLC starting azimuth
+slc_2_2x8_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_2_2x8_phase.row_mult                                 (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_2_2x8_phase.col_mult                                 (m/pixel)       = 3.33102732             ; SLC slant range spacing
+llh_2_2x8.set_rows                                       (pixels)        = 8333                   ; LLH lines
+llh_2_2x8.set_cols                                       (pixels)        = 4427                   ; LLH samples
+llh_2_2x8.row_addr                                       (deg)           = 44.2133                ; latitude at center of first pixel in 2x8 image
+llh_2_2x8.col_addr                                       (deg)           = -115.535               ; longitude at center of first pixel in 2x8 image
+lkv_2_2x8.set_rows                                       (pixels)        = 8333                   ; LKV lines
+lkv_2_2x8.set_cols                                       (pixels)        = 4427                   ; LKV samples
+slc_3_1x1_mag.set_rows                                   (pixels)        = 64718                  ; SLC lines
+slc_3_1x1_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_3_1x1_mag.row_addr                                   (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_1x1_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_3_1x1_mag.row_mult                                   (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_3_1x1_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_3_1x1_phase.set_rows                                 (pixels)        = 64718                  ; SLC lines
+slc_3_1x1_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_3_1x1_phase.row_addr                                 (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_1x1_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_3_1x1_phase.row_mult                                 (m/pixel)       = 0.6                    ; SLC azimuth spacing
+slc_3_1x1_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_3_1x4_mag.set_rows                                   (pixels)        = 16180                  ; SLC lines
+slc_3_1x4_mag.set_cols                                   (pixels)        = 8854                   ; SLC samples
+slc_3_1x4_mag.row_addr                                   (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_1x4_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_3_1x4_mag.row_mult                                   (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_3_1x4_mag.col_mult                                   (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_3_1x4_phase.set_rows                                 (pixels)        = 16180                  ; SLC lines
+slc_3_1x4_phase.set_cols                                 (pixels)        = 8854                   ; SLC samples
+slc_3_1x4_phase.row_addr                                 (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_1x4_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_3_1x4_phase.row_mult                                 (m/pixel)       = 2.4                    ; SLC azimuth spacing
+slc_3_1x4_phase.col_mult                                 (m/pixel)       = 1.66551366             ; SLC slant range spacing
+slc_3_2x8_mag.set_rows                                   (pixels)        = 8090                   ; SLC lines
+slc_3_2x8_mag.set_cols                                   (pixels)        = 4427                   ; SLC samples
+slc_3_2x8_mag.row_addr                                   (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_2x8_mag.col_addr                                   (m)             = 12.4913349             ; SLC starting range
+slc_3_2x8_mag.row_mult                                   (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_3_2x8_mag.col_mult                                   (m/pixel)       = 3.33102732             ; SLC slant range spacing
+slc_3_2x8_phase.set_rows                                 (pixels)        = 8090                   ; SLC lines
+slc_3_2x8_phase.set_cols                                 (pixels)        = 4427                   ; SLC samples
+slc_3_2x8_phase.row_addr                                 (m)             = 17107.1974             ; SLC starting azimuth
+slc_3_2x8_phase.col_addr                                 (m)             = 12.4913349             ; SLC starting range
+slc_3_2x8_phase.row_mult                                 (m/pixel)       = 4.8                    ; SLC azimuth spacing
+slc_3_2x8_phase.col_mult                                 (m/pixel)       = 3.33102732             ; SLC slant range spacing
+llh_3_2x8.set_rows                                       (pixels)        = 8090                   ; LLH lines
+llh_3_2x8.set_cols                                       (pixels)        = 4427                   ; LLH samples
+llh_3_2x8.row_addr                                       (deg)           = 43.9985                ; latitude at center of first pixel in 2x8 image
+llh_3_2x8.col_addr                                       (deg)           = -115.936               ; longitude at center of first pixel in 2x8 image
+lkv_3_2x8.set_rows                                       (pixels)        = 8090                   ; LKV lines
+lkv_3_2x8.set_cols                                       (pixels)        = 4427                   ; LKV samples
+
+set_hddr                                                 (bytes)         = 0                      ; header bytes in data
+set_tail                                                 (bytes)         = 0                      ; tail bytes in data
+llh_1_2x8.set_hdr                                        (bytes)         = 8                      ; header bytes in LLH data to index HGT
+llh_2_2x8.set_hdr                                        (bytes)         = 8                      ; header bytes in LLH data to index HGT
+llh_3_2x8.set_hdr                                        (bytes)         = 8                      ; header bytes in LLH data to index HGT
+
+set_proj                                                 (&)             = SCX                    ; SLC projection format
+llh_1_2x8.set_proj                                       (&)             = EQA                    ; LLH projection format
+llh_2_2x8.set_proj                                       (&)             = EQA                    ; LLH projection format
+llh_3_2x8.set_proj                                       (&)             = EQA                    ; LLH projection format
+lkv_1_2x8.set_proj                                       (&)             = SCX                    ; LKV projection format
+lkv_2_2x8.set_proj                                       (&)             = SCX                    ; LKV projection format
+lkv_3_2x8.set_proj                                       (&)             = SCX                    ; LKV projection format
+
+val_size                                                 (bytes)         = 8                      ; SLC bytes per pixel
+llh_1_2x8.val_size                                       (bytes)         = 12                     ; LLH bytes per pixel
+llh_2_2x8.val_size                                       (bytes)         = 12                     ; LLH bytes per pixel
+llh_3_2x8.val_size                                       (bytes)         = 12                     ; LLH bytes per pixel
+lkv_1_2x8.val_size                                       (bytes)         = 12                     ; LKV bytes per pixel
+lkv_2_2x8.val_size                                       (bytes)         = 12                     ; LKV bytes per pixel
+lkv_3_2x8.val_size                                       (bytes)         = 12                     ; LKV bytes per pixel
+slc_1_1x1_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_1_1x4_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_1_2x8_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_2_1x1_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_2_1x4_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_2_2x8_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_3_1x1_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_3_1x4_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_3_2x8_mag.val_frmt                                   (&)             = COMPLEX_MAGNITUDE      ; SLC data type
+slc_1_1x1_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_1_1x4_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_1_2x8_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_2_1x1_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_2_1x4_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_2_2x8_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_3_1x1_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_3_1x4_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+slc_3_2x8_phase.val_frmt                                 (&)             = COMPLEX_PHASE          ; SLC data type
+llh_1_2x8.val_frmt                                       (&)             = REAL*4                 ; LLH data type
+llh_2_2x8.val_frmt                                       (&)             = REAL*4                 ; LLH data type
+llh_3_2x8.val_frmt                                       (&)             = REAL*4                 ; LLH data type
+lkv_1_2x8.val_frmt                                       (&)             = REAL*4                 ; LKV data type
+lkv_2_2x8.val_frmt                                       (&)             = REAL*4                 ; LKV data type
+lkv_3_2x8.val_frmt                                       (&)             = REAL*4                 ; LKV data type
+
+val_endi                                                 (&)             = LITTLE ENDIAN
+val_mult                                                 (-)             = 1.0                    ; scale for data
+val_addr                                                 (-)             = 0.0                    ; shift for data
+val_minv                                                 (dB)            = -1000000.0             ; minimum value default for display
+val_maxv                                                 (dB)            = 10000000.0             ; maximum value default for display
+slc_1_1x1_phase.val_mult                                 (1.0)           = 1.0
+slc_1_1x4_phase.val_mult                                 (1.0)           = 1.0
+slc_1_2x8_phase.val_mult                                 (1.0)           = 1.0
+slc_2_1x1_phase.val_mult                                 (1.0)           = 1.0
+slc_2_1x4_phase.val_mult                                 (1.0)           = 1.0
+slc_2_2x8_phase.val_mult                                 (1.0)           = 1.0
+slc_3_1x1_phase.val_mult                                 (1.0)           = 1.0
+slc_3_1x4_phase.val_mult                                 (1.0)           = 1.0
+slc_3_2x8_phase.val_mult                                 (1.0)           = 1.0
+slc_1_1x1_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_1_1x4_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_1_2x8_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_2_1x1_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_2_1x4_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_2_2x8_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_3_1x1_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_3_1x4_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_3_2x8_phase.val_minv                                 (rad)           = -3.14                  ; SLC phase minimum value default for display
+slc_1_1x1_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_1_1x4_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_1_2x8_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_2_1x1_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_2_1x4_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_2_2x8_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_3_1x1_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_3_1x4_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+slc_3_2x8_phase.val_maxv                                 (rad)           = 3.14                   ; SLC phase maximum value default for display
+
+dsp_cmap                                                 (&)             = grey                   ; grey color table for SLC magnitude
+slc_1_1x1_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_1_1x4_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_1_2x8_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_2_1x1_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_2_1x4_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_2_2x8_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_3_1x1_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_3_1x4_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+slc_3_2x8_phase.dsp_cmap                                 (&)             = cmy                    ; color table for SLC phase
+llh_1_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+llh_2_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+llh_3_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+lkv_1_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+lkv_2_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+lkv_3_2x8.dsp_cmap                                       (&)             = cmy                    ; color table
+
+set_plat                                                 (deg)           = 44.132819268           ; Peg Latitude
+set_plon                                                 (deg)           = -115.8135546           ; Peg Longitude
+set_phdg                                                 (deg)           = -127.80485581          ; Peg Heading
