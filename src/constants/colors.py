@@ -3,4 +3,4 @@ loc_colors = {'grmesa': {'color': 'mediumspringgreen', 'name': 'Grand Mesa, CO'}
         'lowman': {'color': 'pink', 'name': 'Lowman, ID'}, 'silver': {'color': 'darkgoldenrod', 'name': 'Reynold Creek, ID'}, 'uticam': {'color':'navy', 'name': 'Uticam, MT'}, 'peeler': {'color': 'indianred', 'name':'Peeler, CO'},\
         'alamos': {'color': 'magenta', 'name': 'Alamos, NM'}, 'donner': {'color': 'mediumturquoise', 'name': 'Donner, CA'}, 'dorado': {'color': 'slategrey', 'name': 'Dorado, CA'}}
 
-pol_cols = {'VV':'red', 'HH':'mediumspringgreen', 'VH': 'blue', 'HV': 'darkgoldenrod'}
+pol_colors = {'VV':'red', 'HH':'mediumspringgreen', 'VH': 'blue', 'HV': 'darkgoldenrod'}
