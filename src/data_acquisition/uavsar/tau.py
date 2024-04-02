@@ -9,7 +9,7 @@ sys.path.append('../../funcs/')
 from taus import fit_coh_decay_model, decorrelation_temporal_model
 from xarray_tools import find_cor_ts
 
-for fp in Path('/Users/rdcrlzh1/Documents/uavsar-coherence/uavsar').glob('*_v2.nc'):
+for fp in Path('~/scratch/coherence/uavsar/').glob('*_v3.nc'):
     print(fp)
     if fp.parent.joinpath(fp.stem + '_tau.nc').exists(): continue
     ds = xr.open_dataset(fp)
