@@ -21,3 +21,30 @@ def map_grid_clean(axes, x_tick_n = 3, y_tick_n = 4, ylabel = 'Latitude [°]', x
         for ax in axes[1:]: ax.set_ylabel(''); ax.set_yticks([])
     elif len(axes.shape) == 1 and axes[0].get_gridspec().nrows > 1:
         for ax in axes[:-1]: ax.set_xlabel(''); ax.set_xticks([])
+
+import matplotlib.patches as mpatches
+
+def plt_lc(lc, ax):
+    # lc = ds['land_cover']
+    # https://www.mrlc.gov/data/legends/national-land-cover-database-class-legend-and-description
+    # 11 = open water, and 90+ is wetlands
+    lc.where((lc == 11) | (lc >= 90)).plot(ax = ax, add_colorbar=False, vmin = 0, vmax = 1, cmap = 'Blues')
+    # developed land
+    lc.where((lc >= 21 ) & (lc <= 24)).plot(ax = ax, add_colorbar = False, vmin = 0, vmax = 1, cmap = 'Reds')
+    # barren
+    lc.where(lc == 31).plot(ax = ax, add_colorbar=False, vmin = 0, vmax = 1, cmap = 'Paired')
+    # forests
+    lc.where((lc >= 41 ) & (lc <= 43)).plot(ax = ax, add_colorbar = False, vmin = 0, vmax = 1, cmap = 'Greens')
+    # shrubs/grassland
+    lc.where((lc == 52 ) | (lc == 71)).plot(ax = ax, add_colorbar = False, vmin = 0, vmax = 1, cmap = 'Set3')
+    # Cultivated
+    lc.where((lc == 81 ) | (lc == 82)).plot(ax = ax, add_colorbar = False, vmin = 0, vmax = 1, cmap = 'spring')
+    # perrenial snow/ice
+    lc.where(lc == 12).plot(ax = ax, add_colorbar=False, vmin = 0, vmax = 1, cmap = 'Pastel1')
+
+    cms = plt.colormaps
+    patches = []
+    for color, label in zip([cms['Blues'], cms['Reds'], cms['Paired'], cms['Greens'], cms['Set3'], cms['spring'], cms['Pastel1']],\
+        ['Water/Wetlands', 'Developed', 'Barren', 'Forests', 'Shrubs/Grass', 'Cultivated', 'Perennial Snow']):
+        patches.append(mpatches.Patch(color=color(1000), label=label))
+    ax.legend(handles=patches)
