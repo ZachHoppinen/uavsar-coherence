@@ -22,7 +22,7 @@ for fp in Path('~/scratch/coherence/uavsar/').expanduser().glob('*_v3.nc'):
         da = da.expand_dims(delta_t = [pd.Timedelta((t2 - t1)).days], heading = [heading])
         concats.append(da)
     dts = xr.concat(concats, 'delta_t')
-    tau = dts.curvefit(coords = dts.delta_t, func = decorrelation_temporal_model, reduce_dims = 'delta_t', p0 = {'gamma_inf' : 0.3, 'tau': 5}, bounds={"gamma_inf": (0, 0.6)}, kwargs = {'maxfev': 5000})
+    tau = dts.curvefit(coords = dts.delta_t, func = decorrelation_temporal_model, reduce_dims = 'delta_t', p0 = {'gamma_inf' : 0.3, 'tau': 5}, bounds={"gamma_inf": (0, 0.6 <- change to 0.3 for next run.)}, kwargs = {'maxfev': 5000})
     # how to interpert covariance matrix:
     # https://www.quora.com/How-do-you-interpret-the-estimated-covariance-of-the-parameters-for-a-nonlinear-regression-equation-returned-by-the-curve_fit-function-from-SciPy#:~:text=In%20nonlinear%20regression%2C%20the%20curve_fit,covariance%20matrix%20for%20the%20parameters.
     ds = xr.merge([ds, tau])
