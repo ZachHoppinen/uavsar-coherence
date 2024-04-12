@@ -25,8 +25,8 @@ def MetersToDecimalDegrees(meters, latitude):
     # https://stackoverflow.com/questions/25237356/convert-meters-to-decimal-degrees
     return meters / (111.32 * 1000 * np.cos(latitude * (np.pi / 180)))
 
-dss= {fp.stem.replace('_v2', ''): xr.open_dataset(fp) for fp in sorted(list(Path('/Users/rdcrlzh1/Documents/uavsar-coherence/uavsar').glob('*_v2.nc')))}
-
+dss= {fp.stem.replace('_v2', ''): xr.open_dataset(fp) for fp in sorted(list(Path('/Users/rdcrlzh1/Documents/uavsar-coherence/uavsars').glob('*_v2.nc')))}
+print(dss)
 
 snotels = {fp.stem: {cf.stem:pd.read_csv(cf, comment='#', index_col=0, parse_dates=True) for cf in fp.glob('*.csv')} for fp in Path('/Users/rdcrlzh1/Documents/uavsar-coherence/data/snotel/').rglob('*') if fp.stem in dss.keys()}
 snotels = {k: {k_s: clean_snotel(v_s) for k_s, v_s in v.items()} for k, v in snotels.items()}
