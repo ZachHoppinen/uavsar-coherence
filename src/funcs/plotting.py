@@ -50,6 +50,11 @@ def plt_lc(lc, ax):
     ax.legend(handles=patches)
 
 def add_text(s, ax, loc):
+    """
+    s: string
+    ax: matplotlib axis
+    loc: string of 'upper right', 'upper left', 'lower right', 'lower left'
+    """
     locs = {'upper right': {'xy': (0.99, 0.99), 'va': 'top', 'ha': 'right'}, 'upper left': {'xy': (0.01, 0.99), 'va': 'top', 'ha': 'left'}, 'lower left': {'xy': (0.01, 0.01), 'va': 'bottom', 'ha': 'left'}, 'lower right': {'xy': (0.99, 0.01), 'va': 'bottom', 'ha': 'right'}}
     assert loc in locs.keys(), f'loc must be in set of : {locs.keys()}'
     fontdic = locs[loc]
