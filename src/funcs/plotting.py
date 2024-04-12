@@ -25,7 +25,9 @@ def map_grid_clean(axes, x_tick_n = 3, y_tick_n = 4, ylabel = 'Latitude [°]', x
 import matplotlib.patches as mpatches
 
 def plt_lc(lc, ax):
-    colors = {'Water/Wetlands': 'Blues', 'Developed': 'Reds', 'Barren': 'Paired', 'Forests': 'Greens', 'Shrubs/Grass': 'Set3', 'Cultivated': 'spring', 'Perennial Snow': 'Pastel1'}
+    # colors = {'Water/Wetlands': 'Blues', 'Developed': 'Reds', 'Barren': 'Paired', 'Forests': 'Greens', 'Shrubs/Grass': 'Set3', 'Cultivated': 'spring', 'Perennial Snow': 'Pastel1'}
+    colors = {'Water/Wetlands': 'Blues', 'Developed': 'Reds', 'Barren': 'Paired', 'Forests': 'Greens', 'Shrubs/Grass': 'Set3', 'Perennial Snow': 'Pastel1'}
+
     # lc = ds['land_cover']
     # https://www.mrlc.gov/data/legends/national-land-cover-database-class-legend-and-description
     # 11 = open water, and 90+ is wetlands
