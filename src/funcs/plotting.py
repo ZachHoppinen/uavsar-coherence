@@ -4,6 +4,12 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+def add_text(s, ax, loc):
+    locs = {'upper right': {'xy': (0.99, 0.99), 'va': 'top', 'ha': 'right'}, 'upper left': {'xy': (0.01, 0.99), 'va': 'top', 'ha': 'left'}, 'lower left': {'xy': (0.01, 0.01), 'va': 'bottom', 'ha': 'left'}, 'lower right': {'xy': (0.99, 0.01), 'va': 'bottom', 'ha': 'right'}}
+    assert loc in locs.keys(), f'loc must be in set of : {locs.keys()}'
+    fontdic = locs[loc]
+    ax.text(*fontdic['xy'], s, va = fontdic['va'], ha = fontdic['ha'], transform= ax.transAxes)
+    
 def map_grid_clean(axes, x_tick_n = 3, y_tick_n = 4, ylabel = 'Latitude [°]', xlabel = 'Longitude [°]', rows_1d = True):
     if type(axes) == mpl.axes._axes.Axes: axes = np.array([axes])
     
