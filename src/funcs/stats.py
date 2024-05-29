@@ -33,3 +33,14 @@ def get_stats(xs, ys, clean = True, bias = False):
         return rmse, r, len(xs), MBE
 
     return rmse, r, len(xs)
+
+from sklearn.linear_model import LinearRegression
+
+def fit_lm(xs, ys):
+    if isinstance(xs, pd.Series): xs = xs.values
+    if xs.ndim == 1: xs = xs.reshape(-1, 1)
+    model = LinearRegression().fit(xs, ys)
+    r_sq, intercept, coefficient = model.score(xs, ys), model.intercept_, model.coef_
+    if len(coefficient) == 1: coefficient = coefficient[0]
+
+    return r_sq, intercept, coefficient
